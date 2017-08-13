@@ -17,6 +17,7 @@ def theroot():
 def index(name):
     return template('<b>Hello {{name}}</b>!', name=name)
 
+
 @route('/login')
 def login():
     return '''
@@ -27,16 +28,24 @@ def login():
         </form>
     '''
 
+
 @route('/login', method='POST')
 def do_login():
     username = request.forms.get('username')
     password = request.forms.get('password')
     if check_login(username, password):
         response.set_cookie("account", username, secret='some-secret-key')
-        return "<p>Your login information was correct.</p>"
+        return "<p>Your login information was correct.</p><p><a href='/logout?username=" + username + "'>LOG OUT</a></p>"
     else:
         return "<p>Login failed.</p>"
 
+
+@route('/logout')
+def do_logout():
+    # return request.query.get('username')
+    username = request.query.get('username')
+    response.set_cookie("account", username, secret='some-secret-key', expires=0)
+    return template('<b>Adios {{name}}! You have been logged out.</b>', name=username)
 
 @route('/restricted')
 def restricted_area():
