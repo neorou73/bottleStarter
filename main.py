@@ -56,4 +56,5 @@ def restricted_area():
         return "You are not logged in. Access denied."
 
 
-run(host='localhost', port=8080)
+# run(host='localhost', port=8080)
+run(server='gunicorn', port=8000, host='localhost', workers=4)
